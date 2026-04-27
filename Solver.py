@@ -1,5 +1,6 @@
 import os;os.system("cls" if os.name == "nt" else "clear")
 from time import sleep
+from time import time
 from turtle import *;hideturtle();screensize(500, 600, "black")
 
 solveSequence = ''
@@ -7,22 +8,20 @@ solveSequence = ''
 index = [0,1,2,7,8,3,6,5,4]
 colors = {"u":"#FFFFFF","d":"#FFFF00","r":"#0000FF","l":"#008000","f":"#FF0000","b":"#FF8C00"}
 
-linkEdges = {"u":{1:("r",5),3:("f",1),5:('f',1),7:('l',1)},
-             "l":{1:('u',1),3:('f',7),5:('d',7),7:("r",7)},
-             "r":{1:('u',3),3:("r",3),5:('d',3),7:('f',3)},
-             "b":{1:('d',5),3:("f",3),5:('u',1),7:('l',7)},
-             "f":{1:('u',5),3:("f",7),5:('d',1),7:('l',3)},
-             "d":{1:('f',5),3:("f",5),5:("r",1),7:('l',5)}}
-linkFaces = {"u":{"r":(1,5),"f":(3,1),'f':(5,1),'l':(7,1)},
-             "l":{'u':(1,1),'f':(3,7),'d':(5,7),"r":(7,7)},
-             "r":{'u':(1,3),"r":(3,3),'d':(5,3),'f':(7,3)},
-             "b":{'d':(1,5),"f":(3,3),'u':(5,1),'l':(7,7)},
-             "f":{'u':(1,5),"f":(3,7),'d':(5,1),'l':(7,3)},
-             "d":{'f':(1,5),"f":(3,5),"r":(5,1),'l':(7,5)}}
+
 opposedColor = {"r":"l","l":"r","u":"d","d":"u","f":"b","b":"f"}
+crossColor ={
+                "u" : [( 1,"u"),( 3,"u"),( 5,"u"),( 7,"u"),(37,"f"),(19,"r"),(28,"l"),(50,"b")],
+                "d" : [(10,"d"),(12,"d"),(14,"d"),(15,"d"),(41,"f"),(23,"r"),(32,"l"),(46,"b")],
+                "r" : [(19,"r"),(21,"r"),(23,"r"),(25,"r"),(39,"f"),(3 ,"u"),(12,"d"),(48,"b")],
+                "l" : [(28,"l"),(30,"l"),(32,"l"),(34,"l"),(43,"f"),(7 ,"u"),(16,"d"),(52,"b")],
+                "f" : [(37,"f"),(39,"f"),(41,"f"),(43,"f"),(5 ,"u"),(25,"r"),(30,"l"),(10,"d")],
+                "b" : [(46,"b"),(48,"b"),(50,"b"),(52,"b"),(1 ,"u"),(21,"r"),(34,"l"),(14,"d")]
+            }
+
 
 cube_o = "uuuuuuuuudddddddddrrrrrrrrrlllllllllfffffffffbbbbbbbbb" # len = 54
-#       |+0      |+9      |+18     |+27     |+36     |+45     
+#         |+0      |+9      |+18     |+27     |+36     |+45     
 cube = cube_o
 
 def R():
@@ -203,7 +202,7 @@ moves = {"R": R ,"L" :L ,"U" :U ,"D" :D ,"F" :F ,"B" :B ,
 
 
 
-def FormatterSequence(sequence):
+def FormatSequence(sequence):
     if sequence == "o" : return
     sequence = sequence.upper()#;print("sequence :",sequence)
     return (lambda res=[], i=0: (
@@ -216,38 +215,65 @@ def FormatterSequence(sequence):
         )
     ))()
 def Sequence(sequence:str):
-    sequence = FormatterSequence(sequence)
+    sequence = FormatSequence(sequence)
     global cube
     for move in sequence:
         moves[move]()
 
-def RechercheCroix(scramble):
+def SearchForWCross(scramble):
     Sequence(scramble)
     global cube
-    c = 0
-    dico_cubes = {cube:""} # cube state : "sequence to get to it"
-    cube_a_traiter = [cube]
-    while cube_a_traiter != []:
-        for cube_precedent in cube_a_traiter:
-            cube_a_traiter.remove(cube)
+    dictCubes = {cube:""} # cube state : "sequence to get to state"
+    cubesToTest = [cube]
+    while cubesToTest != []:
+        for cubePre in cubesToTest:
+            cubesToTest.remove(cube)
             for move in moves :
-                cube = cube_precedent
+                cube = cubePre
                 moves[move]()
-                sequence = dico_cubes[cube_precedent] + move
-                if [cube[i] for i in [1,3,5,7]] == ["u","u","u","u"]: # on peut généraliser pour tous les coté pour la version color neutral
-                    print("Cross sequence found after",c,"attempts :",sequence)# in",len(sequence),"moves"
-                    cube = cube_o
-                    return sequence
-                if dico_cubes.get(cube) == None:
-                    dico_cubes[cube] = sequence
-                    cube_a_traiter.append(cube)
-                elif len(dico_cubes[cube]) > len(sequence) :
-                    dico_cubes[cube] = sequence
-                c+=1
-                
+                sequence = dictCubes[cubePre] + move
+                if dictCubes.get(cube) == None:
+                    if [cube[1],cube[3],cube[5],cube[7],cube[28],cube[37],cube[19],cube[50],] == ["u","u","u","u","l","f","r","b"] and [cube[19],cube[28],cube[37],cube[50]] == ["r","l","f","b"]:
+                        print("White cross sequence found after",len(dictCubes),"attempts :",sequence)
+                        cube = cube_o
+                        return sequence
+                    dictCubes[cube] = sequence
+                    cubesToTest.append(cube)
+                elif len(dictCubes[cube]) > len(sequence) : #Normalement n'arrive pas
+                    dictCubes[cube] = sequence
+def SearchForCross(scramble):
+    Sequence(scramble)
+    global cube
+    dictCubes = {cube:""} # cube state : "sequence to get to it"
+    cubesToTest = [cube]
+    while cubesToTest != []:
+        for cubePre in cubesToTest:
+            cubesToTest.remove(cube)
+            for move in moves :
+                cube = cubePre
+                moves[move]()
+                sequence = dictCubes[cubePre] + move
+                if dictCubes.get(cube) == None:
+                    for face in crossColor: # Pour chaque face du cube
+                        correctCross = True
+                        for edge,faceColor in crossColor[face]: # On regarde l'arrête et la couleur de la face associée
+                            if cube[edge] != faceColor :
+                                correctCross = False
+                                break
+                        if correctCross == True:
+                            print(face,"cross sequence found after",len(dictCubes)+1,"attempts :",sequence)
+                            cube = cube_o
+                            #print(dictCubes.values())
+                            return sequence
 
-                           
+                    dictCubes[cube] = sequence
+                    cubesToTest.append(cube)
+def SearchForXCross(scrable):
+    "recherche guidee sinon prend probablement trop de temps % à la cross simple"
 
+
+def ForwardOriginChanger():...
+    
 
 
 
@@ -280,7 +306,7 @@ def TracerCube():
     
     update()
 def LireSequence(sequence):
-    sequence = FormatterSequence(sequence)
+    sequence = FormatSequence(sequence)
     global cube
     TracerCube()
     sleep(1.5)
@@ -289,13 +315,18 @@ def LireSequence(sequence):
         TracerCube()
         sleep(.5)
 
-scramble = "L'B'D2B2L2D2FD2F'U2L2B'U2R'F'DU'LRU"
-"R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
-"RL2F2B2"
+
+e=3
+match e:
+    case 1: scramble = "R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
+    case 2: scramble = "RL2F2B2"
+    case 3: scramble = "L'B'D2B2L2D2FD2F'U2L2B'U2R'F'DU'LRU"
+
 
 print("Scramble :",scramble)
-# sequenceCroix = RechercheCroix(scramble)
-LireSequence(scramble)
-# LireSequence(sequenceCroix)
-LireSequence("BBBL'FRL")
+startTime =time()
+sequenceCroix = SearchForCross(scramble)
+print("Temps de recherche :",time()-startTime)
+Sequence(scramble)
+LireSequence(sequenceCroix)
 done()
