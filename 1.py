@@ -1,1 +1,0 @@
-print('uubddffuudduufddddrrullbbrrrrdllllllrrbblffffbbuurffbb'=='uubddffuudduufddddrrullbbrrrrdllllllrrbblffffbbuurffbb')

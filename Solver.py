@@ -1,5 +1,5 @@
 import re
-import os;os.system("cls" if os.name == "nt" else "clear")
+#import os;os.system("cls" if os.name == "nt" else "clear")
 
 solveSequence = ''
 
@@ -183,7 +183,7 @@ def RechercheCroix(cube=cube,solveSequence=solveSequence):
                         
 "RL2F2B2"
 "R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
-Sequence("RL2F2B2")
+Sequence("R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2")
 RechercheCroix()
 
 
