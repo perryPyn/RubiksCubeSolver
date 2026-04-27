@@ -1,7 +1,5 @@
 import os;os.system("cls" if os.name == "nt" else "clear")
-from time import sleep
-from time import time
-from turtle import *;hideturtle();screensize(500, 600, "black")
+from Display import *
 
 solveSequence = ''
 
