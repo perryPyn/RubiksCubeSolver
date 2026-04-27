@@ -1,5 +1,5 @@
 import re
-#import os;os.system("cls" if os.name == "nt" else "clear")
+import os;os.system("cls" if os.name == "nt" else "clear")
 
 solveSequence = ''
 
@@ -156,16 +156,16 @@ def RechercheCroix(cube=cube,solveSequence=solveSequence):
                     #print(faceLinkedColor,linkColorFace[faceLinkedColor])
 
                     if colorLinked == faceLinkedColor :
-                        if 'w' == opposedColor[faceColor]:
+                        if 'y' == faceColor:
                             Sequence(faceLinked+"2")
                             solveSequence += faceLinked+"2"
                         else :
                             Sequence(faceLinked)
-                            if cube['u'][linkFaces['u'][faceLinked][0]] != 'w':
+                            if cube['u'][linkFaces['u'][faceLinked][0]] == 'w':
+                                solveSequence += faceLinked
+                            else :
                                 Sequence(faceLinked+"2")
                                 solveSequence += faceLinked+"'"
-                            else :
-                                solveSequence += faceLinked
 
                     if colorLinked == opposedColor[faceLinkedColor] :
                         Sequence(face+"2" +linkColorFace[colorLinked])
@@ -183,8 +183,9 @@ def RechercheCroix(cube=cube,solveSequence=solveSequence):
                         
 "RL2F2B2"
 "R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
-Sequence("R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2")
+Sequence("RL2F2B2")
 RechercheCroix()
+
 
 
 from turtle import *;hideturtle();bgcolor("black");goto(-75,300)
