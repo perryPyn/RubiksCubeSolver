@@ -102,7 +102,7 @@ def SearchForXCross(scramble):
 def ForwardOriginChanger():...
 
 
-e=1
+e=3
 match e:
     case 1: scramble = "R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
     case 2: scramble = "RL2F2B2"
