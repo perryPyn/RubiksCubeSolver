@@ -1,4 +1,3 @@
-import os;os.system("cls" if os.name == "nt" else "clear")
 from Display import *
 from Moves import moves
 
@@ -52,9 +51,9 @@ def SearchForCross(scramble):
     global cube
     dictCubes = {cube:""} # cube state : "sequence to get to it"
     cubesToTest = [cube]
-    while cubesToTest != []:
+    while cubesToTest:
         for cubePre in cubesToTest:
-            cubesToTest.remove(cube)
+            cubesToTest.remove(cubePre)
             for move in moves :
                 cube = cubePre
                 cube = moves[move](cube)
