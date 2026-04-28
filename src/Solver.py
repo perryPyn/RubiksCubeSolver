@@ -31,7 +31,7 @@ def SearchForWCross(scramble):
     cubesToTest = [cube]
     while cubesToTest != []:
         for cubePre in cubesToTest:
-            cubesToTest.remove(cube)
+            cubesToTest.remove(cubePre)
             for move in moves :
                 cube = cubePre
                 cube = moves[move](cube)
@@ -82,7 +82,7 @@ def SearchForXCross(scramble):
     cubesToTest = [cube]
     while cubesToTest != []:
         for cubePre in cubesToTest:
-            cubesToTest.remove(cube)
+            cubesToTest.remove(cubePre)
             for move in moves :
                 cube = cubePre
                 cube = moves[move](cube)
