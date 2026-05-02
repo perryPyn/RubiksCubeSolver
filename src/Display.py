@@ -1,5 +1,5 @@
-from time import sleep,time
-from turtle import *;hideturtle();screensize(500, 600, "black")
+from time import sleep
+from turtle import fillcolor,begin_fill,down,forward,right,end_fill,up,goto,pos,clear,tracer,update,done,hideturtle,screensize;hideturtle();screensize(500, 600, "black")
 from Moves import *
 from Utils import FormatSequence
 

@@ -44,49 +44,25 @@ def Sequence(cube, sequence:str):
         cube = moves[move](cube)
     return cube
 
-def SearchForWCross(cube, scramble):
-    Sequence(cube, scramble)
-    dictCubes = {cube:""} # cube state : "sequence to get to state"
-    cubesToTest = [cube]
-    while cubesToTest != []:
-        for cubePre in cubesToTest:
-            cubesToTest.remove(cubePre)
-            for move in moves :
-                cube = cubePre
-                cube = moves[move](cube)
-                sequence = dictCubes[cubePre] + move
-                if dictCubes.get(cube) == None:
-                    if [cube[1],cube[3],cube[5],cube[7],cube[28],cube[37],cube[19],cube[50],] == ["u","u","u","u","l","f","r","b"] and [cube[19],cube[28],cube[37],cube[50]] == ["r","l","f","b"]:
-                        print("White cross sequence found after",len(dictCubes),"attempts :",sequence)
-                        cube = cube_o
-                        return sequence
-                    dictCubes[cube] = sequence
-                    cubesToTest.append(cube)
-                elif len(dictCubes[cube]) > len(sequence) : #Normalement n'arrive pas
-                    dictCubes[cube] = sequence
-
-def SearchForCross(cube, scramble):
-    Sequence(cube, scramble)
+def SearchForCross(cube):
     dictCubes = {cube:""} # cube state : "sequence to get to it"
     cubesToTest = [cube]
     while cubesToTest:
-        for cubePre in cubesToTest:
-            cubesToTest.remove(cubePre)
-            for move in moves :
-                cube = cubePre
-                cube = moves[move](cube)
-                sequence = dictCubes[cubePre] + move
-                if dictCubes.get(cube) == None:
-                    for face in crossColor: # Pour chaque face du cube
+        for cubeToTest in cubesToTest:
+            cubesToTest.remove(cubeToTest) # we removed the one we test
+            for move in moves :                         # for each move, we generate a new cube from the one we are testing
+                cube = moves[move](cubeToTest)          # we store the newly created cube
+                sequence = dictCubes[cubeToTest] + move # and its sequence
+                if dictCubes.get(cube) == None: # if it is not a cube we already generated
+                    for face in crossColor:     # for each faces
                         correctCross = True
-                        for edge,faceColor in crossColor[face]: # On regarde l'arrête et la couleur de la face associée
+                        for edge,faceColor in crossColor[face]: # we check for matching colors indicating a cross was found
                             if cube[edge] != faceColor :
                                 correctCross = False
                                 break
                         if correctCross == True:
-                            print(face,"cross sequence found after",len(dictCubes)+1,"attempts :",sequence)
-                            cube = cube_o
-                            #print(dictCubes.values())
+                            # print(face,"cross sequence found after",len(dictCubes)+1,"attempts :",sequence)
+                            print("Generated cubes", len(dictCubes)+1)
                             return sequence
 
                     dictCubes[cube] = sequence

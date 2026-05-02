@@ -1,6 +1,6 @@
 from Display import *
 from Utils import *
-from Moves import moves
+from time import time
 
 solveSequence = ''
 
@@ -15,9 +15,12 @@ match e:
 
 cube = Sequence(cube_o, scramble)
 startTime =time()
-sequenceCroix = SearchForCross(cube, scramble)
-print("Temps de recherche :",time()-startTime)
+sequenceCroix = SearchForCross(cube)
+print("Search time :",time()-startTime)
 
 
 print("Scramble :",scramble)
 LireSequence(cube_o,[scramble,sequenceCroix])
+
+
+# Generated cubes 47601 Search time : 0.188
