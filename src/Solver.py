@@ -24,28 +24,6 @@ def Sequence(sequence:str):
     for move in sequence:
         cube = moves[move](cube)
 
-def SearchForWCross(scramble):
-    Sequence(scramble)
-    global cube
-    dictCubes = {cube:""} # cube state : "sequence to get to state"
-    cubesToTest = [cube]
-    while cubesToTest != []:
-        for cubePre in cubesToTest:
-            cubesToTest.remove(cubePre)
-            for move in moves :
-                cube = cubePre
-                cube = moves[move](cube)
-                sequence = dictCubes[cubePre] + move
-                if dictCubes.get(cube) == None:
-                    if [cube[1],cube[3],cube[5],cube[7],cube[28],cube[37],cube[19],cube[50],] == ["u","u","u","u","l","f","r","b"] and [cube[19],cube[28],cube[37],cube[50]] == ["r","l","f","b"]:
-                        print("White cross sequence found after",len(dictCubes),"attempts :",sequence)
-                        cube = cube_o
-                        return sequence
-                    dictCubes[cube] = sequence
-                    cubesToTest.append(cube)
-                elif len(dictCubes[cube]) > len(sequence) : #Normalement n'arrive pas
-                    dictCubes[cube] = sequence
-
 def SearchForCross(scramble):
     Sequence(scramble)
     global cube
@@ -75,34 +53,13 @@ def SearchForCross(scramble):
                     cubesToTest.append(cube)
 
 def SearchForXCross(scramble):
-    Sequence(scramble)
-    global cube
-    attempts = 0
-    dictCubes = {cube:""} # cube state : "sequence to get to it"
-    cubesToTest = [cube]
-    while cubesToTest != []:
-        for cubePre in cubesToTest:
-            cubesToTest.remove(cubePre)
-            for move in moves :
-                cube = cubePre
-                cube = moves[move](cube)
-                sequence = dictCubes[cubePre] + move
-                for face,offset in [("u",0),("d",9),("r",18),("l",27),("f",36),("b",45)]:
-                    if [cube[i] for i in [1+offset,3+offset,5+offset,7+offset]] == [face,face,face,face]: # on peut généraliser pour tous les coté pour la version color neutral
-                        if face in [cube[i] for i in [0+offset,2+offset,4+offset,6+offset]] :
-                            print("X-Cross sequence found after",attempts,"attempts :",sequence)# in",len(sequence),"moves"
-                            cube = cube_o
-                            return sequence
-                if dictCubes.get(cube) == None:
-                    dictCubes[cube] = sequence
-                    cubesToTest.append(cube)
-                attempts+=1  
+    ...
 
 
 def ForwardOriginChanger():...
 
 
-e=3
+e=1
 match e:
     case 1: scramble = "R2L2U2D2F2B2FR2UD2B'DRUD2F2UR2U'F2DL2B2D2L2"
     case 2: scramble = "RL2F2B2"
