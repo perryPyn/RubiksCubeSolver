@@ -47,22 +47,27 @@ def Sequence(cube, sequence:str):
 def SearchForCross(cube):
     dictCubes = {cube:""} # cube state : "sequence to get to it"
     cubesToTest = [cube]
+    
     while cubesToTest:
         for cubeToTest in cubesToTest:
             cubesToTest.remove(cubeToTest) # we removed the one we test
+            
             for move in moves :                         # for each move, we generate a new cube from the one we are testing
                 cube = moves[move](cubeToTest)          # we store the newly created cube
                 sequence = dictCubes[cubeToTest] + move # and its sequence
-                if dictCubes.get(cube) == None: # if it is not a cube we already generated
-                    for face in crossColor:     # for each faces
+                    
+                if dictCubes.get(cube) == None: # if it is not a cube we already generated (therefor it does not posses a key in dictCube)
+                    
+                    for face in crossColor:     # for each face
                         correctCross = True
-                        for edge,faceColor in crossColor[face]: # we check for matching colors indicating a cross was found
+                        for edge,faceColor in crossColor[face]: # we retreive the indice of the cross piece of the current face and the color of its center, the we check the color of the cross piece compared to its associated face
                             if cube[edge] != faceColor :
                                 correctCross = False
                                 break
                         if correctCross == True:
                             # print(face,"cross sequence found after",len(dictCubes)+1,"attempts :",sequence)
-                            print("Generated cubes", len(dictCubes)+1)
+                            # print("Generated cubes", len(dictCubes)+1)
+                            print([len(dictCubes[cube]) for cube in dictCubes])
                             return sequence
 
                     dictCubes[cube] = sequence
