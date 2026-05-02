@@ -1,34 +1,12 @@
 from time import sleep,time
 from turtle import *;hideturtle();screensize(500, 600, "black")
 from Moves import *
+from Utils import FormatSequence
 
 index = [0,1,2,7,8,3,6,5,4]
 colors = {"u":"#FFFFFF","d":"#FFFF00","r":"#0000FF","l":"#008000","f":"#FF0000","b":"#FF8C00"}
 
-def FormatSequence(sequence):
-    if not sequence or sequence == "o":
-        return []
-    
-    sequence = sequence.upper().replace(" ", "")
-    res = []
-    i = 0
-    while i < len(sequence):
-        move = sequence[i]
-        # Vérifie si le caractère suivant est un modificateur
-        if i + 1 < len(sequence):
-            if sequence[i+1] == "2":
-                res.append(move)
-                res.append(move)
-                i += 2
-                continue
-            elif sequence[i+1] == "'":
-                res.append(move + "'")
-                i += 2
-                continue
-        
-        res.append(move)
-        i += 1
-    return res
+
 
 def Square(color :str):
     fillcolor(color[:7])
@@ -59,12 +37,12 @@ def TracerCube(cube):
     
     update()
 def LireSequence(cube, sequence):
-    sequence = FormatSequence(sequence)
-    TracerCube(cube)
-    sleep(1.5)
-    for move in sequence:
-        cube = moves[move](cube)
+    for sequence in sequence :
+        sequence = FormatSequence(sequence)
         TracerCube(cube)
-        sleep(.5)
-        
-    return cube
+        sleep(1.5)
+        for move in sequence:
+            cube = moves[move](cube)
+            TracerCube(cube)
+            sleep(.2)
+    done()
